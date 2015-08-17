@@ -1,14 +1,14 @@
-# ESP8266 with DHT11 
+# ESP8266 with DHT22
 
 ## Setup
 
-You need an ESP8266 with [nodemcu firmware](https://github.com/nodemcu/nodemcu-firmware). For programming your ESP8266 you need either an Arduino or other USB-to-serial adapter. 
+You need an ESP8266 with [nodemcu firmware](https://github.com/nodemcu/nodemcu-firmware) >= 0.9.6 . For programming your ESP8266 you need either an Arduino, RaspberryPi or other USB-to-serial adapter.
 
-I'm using [ESPlorer](http://esp8266.ru/esplorer/) to program the LUA scripts onto the ESP8266 memory.
+I'm using [luatool](https://github.com/4refr0nt/luatool) to program the LUA scripts onto the ESP8266 memory. Baud rate is 9600. You can debug using minicom with `sudo minicom -b 9600 -o -D /dev/ttyACM0`
 
 ## Connection Diagram
 
-Connect the ESP8266 with the DHT11. 
+Connect the ESP8266 with the DHT11.
 
 Connect the Arduino to the ESP8266 for programming the device. The Arduino can be removed after programming the device and if you are using an external power supply or battery.
 
@@ -16,7 +16,7 @@ ESP8266 PIN | device
 ----------- | -------
 GND         | GND
 GPIO2       | -
-GPIO0       | DHT11 data (2nd from left) & 3.3V VCC w/ 10kΩ resistor
+GPIO0       | DHT22 data (2nd from left) & 3.3V VCC w/ 10kΩ resistor
 URXD        | Arduino 0 (RX), for programming
 UTXD        | Arduino 1 (TX), for programming
 CH_PD       | 3.3V VCC
@@ -30,8 +30,8 @@ Fritzing Parts: [DHT11](https://github.com/adafruit/Fritzing-Library/blob/master
 
 ## The script
 
-The script is an adaption from [ok1cdj's DHT11 script](https://github.com/ok1cdj/ESP8266-LUA/blob/master/Thermometer-DHT11-Thingspeak/dht11.lua) for Thingspeak.
+Since the newer versions of nodemcu support DHT sensors natively, the code is very trivial. The rest of the code is taken from chk1. See the [README](https://github.com/chk1/esp8266-dht11-opensensemap/blob/master/README.md) of the base fork for more information.
 
-Configure your wifi SSID and password in `init.lua`, configure your [OpenSenseMap](http://opensensemap.org/) box id and temperature & humidity sensor ids in `dht11.lua`.
+Configure your wifi SSID and password in `init.lua`.
 
 Save both `init.lua` & `dht11.lua` on your device, then restart it.
