@@ -1,12 +1,11 @@
 -- post_dht.lua
-
 pin = 3
--- json_tpl = "{\"collection\":\"tmps_in2\",\"timestamp\":\"%s\",\"data\":{\"temp\":%.1f,\"hum\":%.1f}}"
-json_tpl = "{\"collection\":\"tmps_in2\",\"data\":{\"temp\":%.1f,\"hum\":%.1f}}"
 port = 80
 host_ip = '54.225.217.107'
 hostname = 'requestb.in'
 path = '/t524f5t5'
+json_tpl = "{\"collection\":\"tmps_in2\",\"timestamp\":\"%s\",\"data\":{\"temp\":%.1f,\"hum\":%.1f, \"heap\":%u}}"
+-- json_tpl = "{\"collection\":\"tmps_in2\",\"data\":{\"temp\":%.1f,\"hum\":%.1f}}"
 delay = 20000
 
 function postData(pin)
@@ -14,7 +13,7 @@ function postData(pin)
   status,temp,humi = dht.read(pin)
   if( status == dht.OK ) then
     print("establishing connection to ".. hostname .." (".. host_ip ..":".. port ..")")
-    json = string.format(json_tpl, temp, humi)
+    json = string.format(json_tpl, TIME:get_iso_stamp(), temp, humi, node.heap())
 
     conn=net.createConnection(net.TCP, 0)
     conn:on("receive", function(conn, payload) print(payload) end)
@@ -48,6 +47,6 @@ end
 postData(pin)
 
 -- send data every once in a while
-tmr.alarm(2, delay, 1, function()
+tmr.alarm(3, delay, 1, function()
   postData(pin)
 end )
