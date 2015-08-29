@@ -31,7 +31,7 @@ return({
   tz=0,
   udptimer=2,
   udptimeout=1000,
-  ntpserver="192.53.103.108",
+  ntpserver="5.9.7.51",
   sk=nil,
   sync=function(self,callback)
     -- request string blindly taken from http://arduino.cc/en/Tutorial/UdpNTPClient ;)
@@ -100,7 +100,7 @@ return({
       self.year = self.year + 1
     end
 
-    self.day = stamp
+    self.day = stamp + 1
   end,
   get_iso_stamp=function(self)
     return(string.format("%04u-%02u-%02uT%02u:%02u:%02u+00:00",self.year,self.month,self.day,self.hour,self.minute,self.second))

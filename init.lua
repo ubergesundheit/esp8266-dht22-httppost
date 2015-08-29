@@ -8,7 +8,7 @@ tmr.alarm(3, 1000, 1, function()
   if wifi.sta.getip()== nil then
     print("IP unavaiable, Waiting...")
   else
-    tmr.stop(1)
+    tmr.stop(3)
 
     TIME=loadfile("ntp.lua")()
     TIME:run(1,1,3600)

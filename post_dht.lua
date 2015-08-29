@@ -9,6 +9,10 @@ json_tpl = "{\"collection\":\"tmps_in2\",\"timestamp\":\"%s\",\"data\":{\"temp\"
 delay = 20000
 
 function postData(pin)
+  if( TIME.year < 2015 ) then
+    print("network time not ready")
+    return
+  end
   -- get dht values
   status,temp,humi = dht.read(pin)
   if( status == dht.OK ) then
