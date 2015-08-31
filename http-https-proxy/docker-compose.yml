@@ -1,0 +1,6 @@
+proxy:
+  image: nginx
+  volumes:
+    - ./nginx.conf:/etc/nginx/nginx.conf
+  ports:
+    - 3031:80
