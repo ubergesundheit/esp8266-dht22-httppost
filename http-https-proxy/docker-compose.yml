@@ -1,6 +1,7 @@
 proxy:
-  image: nginx
-  volumes:
-    - ./nginx.conf:/etc/nginx/nginx.conf
+  image: armhfbuild/openresty:alpine
   ports:
     - 3031:80
+  volumes:
+    - ./modify-timestamp.lua:/opt/openresty/nginx/modify-timestamp.lua
+    - ./nginx.conf:/opt/openresty/nginx/conf/nginx.conf

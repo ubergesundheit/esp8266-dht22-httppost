@@ -28,6 +28,7 @@ http {
         error_page  405     =200 $uri;
 
         location / {
+            access_by_lua_file /opt/openresty/nginx/modify-timestamp.lua;
             proxy_pass http://host:port/path/;
             proxy_set_header Accept application/json;
             proxy_set_header Content-Type application/json;
