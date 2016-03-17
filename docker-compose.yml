@@ -1,0 +1,6 @@
+nodemcutool:
+  build: .
+  devices:
+    - "/dev/ttyACM0:/dev/ttyACM0"
+  volumes:
+    - ".:/usr/src/app"
