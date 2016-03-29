@@ -2,13 +2,22 @@
 
 ## Setup
 
-You need an ESP8266 with [nodemcu firmware](https://github.com/nodemcu/nodemcu-firmware) >= 0.9.6 . For programming your ESP8266 you need either an Arduino, RaspberryPi or other USB-to-serial adapter.
+You need an ESP8266 with [nodemcu firmware](https://github.com/nodemcu/nodemcu-firmware) like described below. For programming your ESP8266 you need either an Arduino, RaspberryPi or other USB-to-serial adapter.
 
-I'm using [luatool](https://github.com/4refr0nt/luatool) to program the LUA scripts onto the ESP8266 memory. Baud rate is 9600. You can debug using minicom with `sudo minicom -b 9600 -o -D /dev/ttyACM0`
+```
+NodeMCU custom build by frightanic.com
+        branch: dev
+        commit: 09269a64526b42963ad64cb62e332b1d1fd9eb1d
+        SSL: true
+        modules: cjson,crypto,dht,file,http,net,node,rtctime,sntp,tmr,wifi
+ build  built on: 2016-03-17 16:47
+ powered by Lua 5.1.4 on SDK 1.5.1(e67da894)
+```
+
 
 ## Connection Diagram
 
-Connect the ESP8266 with the DHT11.
+Connect the ESP8266 with the DHT22.
 
 Connect the Arduino to the ESP8266 for programming the device. The Arduino can be removed after programming the device and if you are using an external power supply or battery.
 
@@ -30,8 +39,17 @@ Fritzing Parts: [DHT11](https://github.com/adafruit/Fritzing-Library/blob/master
 
 ## The script
 
+Data will be transferred as signed Json Web Token with HS256 algorithm.
+
 Since the newer versions of nodemcu support DHT sensors natively, the code is very trivial. The rest of the code is taken from chk1. See the [README](https://github.com/chk1/esp8266-dht11-opensensemap/blob/master/README.md) of the base fork for more information.
 
-Configure your wifi SSID and password in `init.lua`.
+Configuration goes in `init.lua`.
 
-Save both `init.lua` & `dht11.lua` on your device, then restart it.
+Save both `init.lua` & `util.lua` on your device, then restart it.
+
+You can use docker-compose like so: (don't forget do modify the docker-compose.yml)
+```
+docker-compose run --rm nodemcutool upload --optimize --compile utils.lua
+docker-compose run --rm nodemcutool upload --optimize  init.lua
+docker-compose run --rm nodemcutool
+```
