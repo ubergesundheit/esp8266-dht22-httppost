@@ -11,6 +11,9 @@ WIFI_CONFIG = {
   netmask="255.255.255.0",
   gateway="192.168.1.1"
 }
+DHT_PIN = 3 -- where the DHT 22 is connected (GPIO2)
+COLLECTION = "some_string"
+POST_DELAY = 600000 -- in milliseconds
 
 print("Setting up WIFI...")
 wifi.setmode(wifi.STATION)
@@ -25,7 +28,8 @@ tmr.alarm(1, 1000, 1, function()
     tmr.stop(1)
     print("Config done, IP is "..wifi.sta.getip())
     dofile("utils.lc")
+    publishStatus()
     -- send data every once in a while (every minute)
-    tmr.alarm(2, 60000, 1, publishStatus)
+    tmr.alarm(2, POST_DELAY, 1, publishStatus)
   end
 end)

@@ -1,34 +1,55 @@
+-- function postData(data)
+--   print(data)
+--   local jwt = createJwt(data,DEVICE_SECRET)
+--   print(jwt)
+--   http.post(POST_URL,
+--     'Content-Type: application/json; charset=utf-8\r\n',
+--     jwt,
+--     function(code, data)
+--       if (code < 0) then
+--         print("HTTP request failed")
+--       else
+--         print(code, data)
+--
+--       end
+--     end)
+-- end
+
 function postData(data)
-  print(data)
-  local jwt = createJwt(data,DEVICE_SECRET)
-  print(jwt)
   http.post(POST_URL,
-      'Content-Type: application/json; charset=utf-8\r\n',
-      jwt,
-      function(code, data)
-        if (code < 0) then
-          print("HTTP request failed")
-        else
-          print(code, data)
-        end
-      end)
+    'Content-Type: application/json; charset=utf-8\r\n',
+    data,
+    function(code, data)
+      if (code < 0) then
+        print("HTTP request failed")
+      else
+        print(code, data)
+
+      end
+    end)
 end
 
 function publishStatus()
-  getTimestamp(function(ts)
-    bootreason, resetreason = node.bootreason()
-    local json = {
-      collection="testcollection_esp",
-      timestamp=ts,
-      data={
-        heap=node.heap(),
-        boot_reason=bootreason,
-        reset_reason=resetreason
+  status,temp,humi = dht.read(DHT_PIN)
+  if status == dht.OK then
+    getTimestamp(function(ts)
+      local json = {
+        collection=COLLECTION,
+        timestamp=ts,
+        data={
+          temp=temp,
+          hum=humi,
+          heap=node.heap()
+        }
       }
-    }
-    postData(cjson.encode(json))
-  end,
-  function()end)
+      postData(cjson.encode(json))
+    end,
+    function()end)
+  elseif status == dht.ERROR_CHECKSUM then
+    print("dht checksum error")
+  elseif status == dht.ERROR_TIMEOUT then
+    print("dht timeout")
+  end
 end
 
 function createJwt(payload,secret)
