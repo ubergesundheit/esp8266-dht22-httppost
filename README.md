@@ -1,3 +1,8 @@
+# DEPRECATED. USE https://github.com/ubergesundheit/esp8266-temploggers
+
+
+
+
 # ESP8266 with DHT22
 
 ## Setup
